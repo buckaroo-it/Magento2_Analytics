@@ -1,0 +1,16 @@
+# Buckaroo Magento2 Analytics extension
+
+## Installation & Configuration
+```
+composer require buckaroo/magento2_analytics
+php bin/magento module:enable Buckaroo_Magento2_Analytics
+php bin/magento setup:upgrade
+php bin/magento setup:static-content:deploy
+```
+
+## Contribute
+See [Contribution Guidelines](CONTRIBUTING.md)
+
+## Support:
+
+https://support.buckaroo.nl/contact
