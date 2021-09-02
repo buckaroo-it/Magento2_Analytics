@@ -37,6 +37,7 @@ class Analytics implements \Magento\Framework\Event\ObserverInterface
             if ($quote) {
                 $quote_id = $quote->getEntityId();
             }
+        //phpcs:ignore
         } catch (\Exception $e) {
             //@todo log
         }

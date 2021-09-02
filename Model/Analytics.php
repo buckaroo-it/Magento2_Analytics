@@ -13,8 +13,8 @@ class Analytics extends \Magento\Framework\Model\AbstractModel
     protected $dataObjectHelper;
 
     protected $_eventPrefix = 'buckaroo_magento2_analytics';
-    protected $analyticsDataFactory;
 
+    protected $analyticsDataFactory;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -57,4 +57,3 @@ class Analytics extends \Magento\Framework\Model\AbstractModel
         return $analyticsDataObject;
     }
 }
-

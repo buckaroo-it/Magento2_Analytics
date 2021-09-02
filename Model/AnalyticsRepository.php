@@ -42,7 +42,6 @@ class AnalyticsRepository implements AnalyticsRepositoryInterface
 
     private $collectionProcessor;
 
-
     /**
      * @param ResourceAnalytics $resource
      * @param AnalyticsFactory $analyticsFactory
@@ -180,4 +179,3 @@ class AnalyticsRepository implements AnalyticsRepositoryInterface
         return $this->delete($this->get($analyticsId));
     }
 }
-

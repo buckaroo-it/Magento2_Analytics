@@ -28,22 +28,23 @@ class AbstractTransactionBuilderAfterGetUrl
             $ga_cookie = $this->cookieManager->getCookie(
                 '_ga'
             );
-            if($ga_cookie) {
-              $parts = explode(".", $ga_cookie);
-              if ($parts) {
-                  array_shift($parts);
-              }
-              if ($parts) {
-                  array_shift($parts);
-              }
-              $clientId = implode(".", $parts);
+            if ($ga_cookie) {
+                $parts = explode(".", $ga_cookie);
+                if ($parts) {
+                    array_shift($parts);
+                }
+                if ($parts) {
+                    array_shift($parts);
+                }
+                $clientId = implode(".", $parts);
 
-              if (strpos($result, '?') !== false) {
-                  $result .= "&clientId=" . $clientId;
-              } else {
-                  $result .= "?clientId=" . $clientId;
-              }
+                if (strpos($result, '?') !== false) {
+                    $result .= "&clientId=" . $clientId;
+                } else {
+                    $result .= "?clientId=" . $clientId;
+                }
             }
+        //phpcs:ignore
         } catch (\Exception $e) {
             //@todo log
         }
