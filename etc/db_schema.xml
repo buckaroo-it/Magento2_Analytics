@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the MIT License
+ * It is available through the world-wide-web at this URL:
+ * https://tldrlegal.com/license/mit-license
+ * If you are unable to obtain it through the world-wide-web, please send an email
+ * to support@buckaroo.nl so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade this module to newer
+ * versions in the future. If you wish to customize this module for your
+ * needs please contact support@buckaroo.nl for more information.
+ *
+ * @copyright Copyright (c) Buckaroo B.V.
+ * @license   https://tldrlegal.com/license/mit-license
+ */
+ -->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">      
+        <table name="buckaroo_magento2_analytics" resource="default" engine="innodb" comment="Buckaroo GA Client Id Table">
+            <column xsi:type="smallint" name="analytics_id" padding="6" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+            <constraint xsi:type="primary" referenceId="PRIMARY">
+                <column name="analytics_id"/>
+            </constraint>
+            <column name="quote_id" nullable="true" xsi:type="int" comment="quote_id" identity="false"/>
+            <column name="client_id" nullable="true" xsi:type="varchar" comment="client_id" length="255"/>
+            <column name="created_at" xsi:type="timestamp" on_update="false" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        </table>
+</schema>

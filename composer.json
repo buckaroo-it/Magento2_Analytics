@@ -1,0 +1,32 @@
+{
+    "name": "buckaroo/magento2analytics",
+    "description": "Buckaroo Magento2 Analytics extension",
+    "require": {
+        "buckaroo/magento2": ">=1.37"
+    },
+    "type": "magento2-module",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Buckaroo",
+            "email": "support@buckaroo.nl",
+            "homepage": "https://www.buckaroo.nl"
+        }
+    ],
+    "support": {
+        "email": "support@buckaroo.nl",
+        "issues": "https://support.buckaroo.nl/contact",
+        "wiki": "https://support.buckaroo.nl",
+        "docs": "https://support.buckaroo.nl"
+    },
+    "minimum-stability": "stable",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Buckaroo\\Magento2Analytics\\": ""
+        }
+    }
+}
