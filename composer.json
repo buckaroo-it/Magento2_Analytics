@@ -2,7 +2,7 @@
     "name": "buckaroo/magento2analytics",
     "description": "Buckaroo Magento2 Analytics extension",
     "require": {
-        "buckaroo/magento2": ">=1.37"
+        "buckaroo/magento2": "~1.37"
     },
     "type": "magento2-module",
     "license": "MIT",
@@ -20,7 +20,6 @@
         "docs": "https://support.buckaroo.nl"
     },
     "minimum-stability": "stable",
-    "require": {},
     "autoload": {
         "files": [
             "registration.php"
