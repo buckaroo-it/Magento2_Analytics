@@ -22,7 +22,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">      
         <table name="buckaroo_magento2_analytics" resource="default" engine="innodb" comment="Buckaroo GA Client Id Table">
-            <column xsi:type="smallint" name="analytics_id" padding="6" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+            <column xsi:type="int" name="analytics_id" padding="11" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
             <constraint xsi:type="primary" referenceId="PRIMARY">
                 <column name="analytics_id"/>
             </constraint>
