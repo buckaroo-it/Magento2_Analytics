@@ -22,9 +22,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <buckaroo_magento2>
-            <account>
+            <analytics>
                 <enable_ga_client_id_tracking>0</enable_ga_client_id_tracking>
-            </account>
+            </analytics>
         </buckaroo_magento2>
     </default>
 </config>
