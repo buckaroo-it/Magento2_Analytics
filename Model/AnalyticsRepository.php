@@ -119,7 +119,17 @@ class AnalyticsRepository implements AnalyticsRepositoryInterface
         $analytics = $this->analyticsFactory->create();
         $this->resource->load($analytics, $analyticsId);
         if (!$analytics->getId()) {
-            throw new NoSuchEntityException(__('Analytics with id "%1" does not exist.', $analyticsId));
+            throw new NoSuchEntityException(__('Analytics data with id "%1" does not exist.', $analyticsId));
+        }
+        return $analytics->getDataModel();
+    }
+
+    public function getByQuoteId($quoteId)
+    {
+        $analytics = $this->analyticsFactory->create();
+        $this->resource->load($analytics, $quoteId, 'quote_id');
+        if (!$analytics->getId()) {
+            throw new NoSuchEntityException(__('Analytics data with quote_id "%1" does not exist.', $quoteId));
         }
         return $analytics->getDataModel();
     }
