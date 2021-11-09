@@ -19,7 +19,7 @@
         "wiki": "https://support.buckaroo.nl",
         "docs": "https://support.buckaroo.nl"
     },
-    "version": "v1.0.2",
+    "version": "v1.0.3",
     "minimum-stability": "stable",
     "autoload": {
         "files": [
