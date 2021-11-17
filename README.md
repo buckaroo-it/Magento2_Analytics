@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://www.buckaroo.nl/media/2975/m2_icon.jpg" width="150px" position="center">
+</p>
+
 # Buckaroo Magento2 Analytics extension
 
 ## Installation & Configuration
