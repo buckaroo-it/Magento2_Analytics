@@ -36,9 +36,15 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
         /**
          * @noinspection PhpUndefinedMethodInspection
          */
-        $url = $this->accountConfig->getSuccessRedirect($store);
 
-        $this->messageManager->addSuccessMessage(__('Your order has been placed succesfully.'));
+        $url = $this->accountConfig->getSuccessRedirect($store);
+        
+        $successMessage = __('Your order has been placed successfully.');
+        if (method_exists($this, 'addSuccessMessage')) {
+            $this->addSuccessMessage($successMessage);
+        } else {
+            $this->messageManager->addSuccessMessage($successMessage);
+        }
 
         $this->quote->setReservedOrderId(null);
         $this->customerSession->setSkipSecondChance(false);
@@ -62,14 +68,21 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
 
         //add clientid - GA tracking
         $clientId = $this->getRequest()->getParam('clientId');
+
+
+        $queryArguments = [];
+        parse_str(parse_url($url, PHP_URL_QUERY), $queryArguments);
+
         if ($clientId) {
             if (strpos($url, '?') !== false) {
-                $url .= "&clientId=".$clientId;
-            } else {
-                $url .= "?clientId=".$clientId;
+                $url = substr($url, 0, strpos($url, '?'));
             }
+            $queryArguments = array_merge($queryArguments, ["clientId" => $clientId]);
         }
 
-        return $this->_redirect($url);
+        if (method_exists($this, 'handleProcessedResponse')) {
+            return $this->handleProcessedResponse($url, ['_query' =>$queryArguments]);
+        }
+        return $this->_redirect($url, ['_query' =>$queryArguments]);
     }
 }
