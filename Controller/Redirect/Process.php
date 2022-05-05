@@ -71,7 +71,7 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
 
 
         $queryArguments = [];
-        parse_str(parse_url($url, PHP_URL_QUERY), $queryArguments);
+        parse_str((string)parse_url($url, PHP_URL_QUERY), $queryArguments);
 
         if ($clientId) {
             if (strpos($url, '?') !== false) {
