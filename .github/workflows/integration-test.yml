@@ -21,8 +21,8 @@ jobs:
       - name: Start Docker
         run: PHP_VERSION=${{ matrix.PHP_VERSION }} MAGENTO_VERSION=magento${{ matrix.MAGENTO_VERSION }} docker-compose -f .github/workflows/templates/docker-compose.yml up -d
 
-      - name: Create branch for Composer and remove version from composer.json
-        run: git checkout -b feature/ci && sed -i '/version/d' ./composer.json
+      # - name: Create branch for Composer and remove version from composer.json
+        # run: git checkout -b feature/ci && sed -i '/version/d' ./composer.json
 
       - name: Upload the code into the docker container
         run: docker cp $(pwd) magento-project-community-edition:/data/extensions/ && docker exec magento-project-community-edition composer require buckaroo/magento2analytics
