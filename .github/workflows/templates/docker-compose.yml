@@ -30,4 +30,4 @@ services:
       - db
       - elasticsearch
     volumes:
-      - ./:/data/extensions/workdir
+      - ./:/data/app/code/Buckaroo/Analytics
