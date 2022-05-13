@@ -24,9 +24,6 @@ jobs:
       # - name: Create branch for Composer and remove version from composer.json
         # run: git checkout -b feature/ci && sed -i '/version/d' ./composer.json
 
-      - name: Upload the code into the docker container
-        run: docker exec m2 bin/magento setup:upgrade
-
       - name: Enable developer mode
         run: docker exec m2 php bin/magento deploy:mode:set developer
 
