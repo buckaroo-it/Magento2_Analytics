@@ -24,7 +24,7 @@ services:
       MYSQL_PASSWORD: magento
       MYSQL_SQL_TO_RUN: 'GRANT ALL ON *.* TO "root"@"%";'
   web:
-    image: michielgerritsen/magento-project-community-edition:php74-fpm-magento2.4.2
+    image: michielgerritsen/magento-project-community-edition:${PHP_VERSION}-${MAGENTO_VERSION}
     container_name: magento-project-community-edition
     depends_on:
       - db
