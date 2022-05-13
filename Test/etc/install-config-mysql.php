@@ -13,7 +13,7 @@ return [
     'backend-frontname' => 'backend',
     'search-engine' => 'elasticsearch7',
     'elasticsearch-host' => '127.0.0.1',
-    'elasticsearch-port' => 9200,
+    'elasticsearch-port' => '9200',
     'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
     'admin-password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
     'admin-email' => \Magento\TestFramework\Bootstrap::ADMIN_EMAIL,
