@@ -3,6 +3,7 @@ version: '3'
 services:
   es:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
+    container_name: es
     environment:
       - xpack.security.enabled=false
       - discovery.type=single-node
@@ -30,9 +31,10 @@ services:
       MYSQL_SQL_TO_RUN: 'GRANT ALL ON *.* TO "root"@"%";'
   magento2:
     image: michielgerritsen/magento-project-community-edition:${PHP_VERSION}-${MAGENTO_VERSION}
+    container_name: magento2
     environment: 
       ELASTICSEARCH-HOST: "es"
-      ELASTICSEARCH-PORT: 9200
+      ELASTICSEARCH-PORT: "9200"
     depends_on:
       - db
       - es
