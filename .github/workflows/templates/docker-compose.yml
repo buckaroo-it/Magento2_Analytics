@@ -33,6 +33,9 @@ services:
     volumes:
       - type: bind
         source: ../../../
+        target: /data/extensions/workdir
+      - type: bind
+        source: ../../../
         target: /data/app/code/Buckaroo/Analytics
       - type: bind
         source: ../../../Test/etc
