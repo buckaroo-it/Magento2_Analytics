@@ -5,13 +5,14 @@
  */
 
 return [
-    'db-host' => '127.0.0.1',
+    'db-host' => 'db',
     'db-user' => 'magento-test',
     'db-password' => 'password',
     'db-name' => 'magento-test',
     'db-prefix' => '',
     'backend-frontname' => 'backend',
-    'elasticsearch-host' => '127.0.0.1',
+    'search-engine' => 'elasticsearch7',
+    'elasticsearch-host' => 'es',
     'elasticsearch-port' => 9200,
     'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
     'admin-password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
