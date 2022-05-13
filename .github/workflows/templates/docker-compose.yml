@@ -42,7 +42,14 @@ services:
       - db
       - es
     volumes:
-      - ./:/data/app/code/Buckaroo/Analytics
+      - type: bind
+        source: ../../../
+        target: /data/app/code/Buckaroo/Analytics
+      - type: bind
+        source: ../../../Test/etc
+        target: /data/dev/tests/integration/etc/
+    ports:
+      - 88:80
 
 volumes:
   es-data:
