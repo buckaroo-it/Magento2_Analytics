@@ -2,7 +2,7 @@ version: '3'
 
 services:
   elasticsearch:
-    image: elasticsearch:2.7
+    image: elasticsearch:2.4
     environment:
       - cluster.name=docker-cluster
       - bootstrap.memory_lock=true
