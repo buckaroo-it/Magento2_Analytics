@@ -1,6 +1,20 @@
 version: '3'
 
 services:
+  elasticsearch:
+    image: elasticsearch:2.7
+    environment:
+      - cluster.name=docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearchdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
   db:
     image: mysql:5.7
     environment:
@@ -10,9 +24,10 @@ services:
       MYSQL_PASSWORD: magento
       MYSQL_SQL_TO_RUN: 'GRANT ALL ON *.* TO "root"@"%";'
   web:
-    image: michielgerritsen/magento-project-community-edition:${PHP_VERSION}-${MAGENTO_VERSION}
+    image: michielgerritsen/magento-project-community-edition:php74-fpm-magento2.4.2
     container_name: magento-project-community-edition
     depends_on:
       - db
+      - elasticsearch
     volumes:
       - ./:/data/extensions/workdir
