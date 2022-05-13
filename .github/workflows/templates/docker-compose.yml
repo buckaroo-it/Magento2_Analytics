@@ -1,20 +1,25 @@
 version: '3'
 
 services:
-  elasticsearch:
-    image: elasticsearch:2.4
+  es:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.4.0
     environment:
-      - cluster.name=docker-cluster
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - discovery.type=single-node
     ulimits:
       memlock:
         soft: -1
         hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    cap_add:
+      - IPC_LOCK
     volumes:
-      - ./elasticsearchdata:/usr/share/elasticsearch/data
+      - es-data:/usr/share/elasticsearch/data
     ports:
       - 9200:9200
+      - 9300:9300
   db:
     image: mysql:5.7
     environment:
@@ -23,11 +28,17 @@ services:
       MYSQL_USER: magento
       MYSQL_PASSWORD: magento
       MYSQL_SQL_TO_RUN: 'GRANT ALL ON *.* TO "root"@"%";'
-  web:
+  magento2:
     image: michielgerritsen/magento-project-community-edition:${PHP_VERSION}-${MAGENTO_VERSION}
-    container_name: magento-project-community-edition
+    environment: 
+      ELASTICSEARCH-HOST: "es"
+      ELASTICSEARCH-PORT: 9200
     depends_on:
       - db
-      - elasticsearch
+      - es
     volumes:
       - ./:/data/app/code/Buckaroo/Analytics
+
+volumes:
+  es-data:
+    driver: local
