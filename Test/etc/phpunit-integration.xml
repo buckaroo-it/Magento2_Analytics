@@ -10,7 +10,7 @@
          colors="true"
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
-         bootstrap="../framework/bootstrap.php"
+         bootstrap="/data/dev/tests/integration/framework/bootstrap.php"
          stderr="true"
 >
     <!-- Test suites definition -->
