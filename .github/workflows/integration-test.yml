@@ -31,4 +31,4 @@ jobs:
         run: docker exec m2 php bin/magento deploy:mode:set developer
 
       - name: Run tests
-        run: docker exec m2 bash -c "cd /data/dev/tests/integration/ && /data/vendor/bin/phpunit -c /data/dev/tests/integration/phpunit-integration.xml"
+        run: docker exec m2 /data/vendor/bin/phpunit -c /data/app/code/Buckaroo/Analytics/Test/etc/phpunit-integration.xml
