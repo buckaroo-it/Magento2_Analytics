@@ -12,8 +12,8 @@ jobs:
           #   MAGENTO_VERSION: 2.4.2
           # - PHP_VERSION: php74-fpm
           #   MAGENTO_VERSION: 2.4.2
-          - PHP_VERSION: php74-fpm
-            MAGENTO_VERSION: 2.4.3-with-replacements
+          - PHP_VERSION: php81-fpm
+            MAGENTO_VERSION: 2.4.4
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -26,6 +26,9 @@ jobs:
 
       - name: Enable developer mode
         run: docker exec m2 php bin/magento deploy:mode:set developer
+        
+      - name: DI compile
+        run: docker exec m2 php bin/magento setup:di:compile
 
       - name: Run tests
         run: docker exec m2 /data/vendor/bin/phpunit -c /data/app/code/Buckaroo/Analytics/Test/etc/phpunit-integration.xml
