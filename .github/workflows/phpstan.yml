@@ -1,0 +1,32 @@
+name: phpstan
+on: [push, pull_request]
+
+jobs:
+    build:
+        strategy:
+            matrix:
+              include:
+#                 - PHP_VERSION: php72-fpm
+#                   MAGENTO_VERSION: 2.3.3
+#                 - PHP_VERSION: php73-fpm
+#                   MAGENTO_VERSION: 2.3.6-p1
+                - PHP_VERSION: php81-fpm
+                  MAGENTO_VERSION: 2.4.4
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v1
+
+            - name: Start Docker
+              run: docker run --detach --name m2 ecommercecloud/magento2-test-runner:${{ matrix.PHP_VERSION }}-magento${{ matrix.MAGENTO_VERSION }}
+
+#             - name: Create branch for Composer and remove version from composer.json
+#               run: git checkout -b continuous-integration-test-branch && sed -i '/version/d' ./composer.json
+
+            - name: Upload our code into the docker container
+              run: docker cp $(pwd) m2:/data/extensions/
+
+            - name: Install the extensions in Magento
+              run: docker exec m2 composer require buckaroo/analytics fooman/phpstan-magento2-magic-methods:^0.7 phpstan/phpstan:0.*
+
+            - name: Run PHPStan
+              run: docker exec m2 /bin/bash -c "./vendor/bin/phpstan analyse -c /data/extensions/*/phpstan.neon /data/extensions"
