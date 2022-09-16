@@ -98,3 +98,6 @@ If you want to contribute as well, then please follow our [Contribution Guidelin
 ### Additional information
 - **Support:** https://support.buckaroo.eu/contact
 - **Contact:** [support@buckaroo.nl](mailto:support@buckaroo.nl) or [+31 (0)30 711 50 50](tel:+310307115050)
+
+<b>Please note:</b><br>
+This file has been prepared with the greatest possible care and is subject to language and/or spelling errors.
