@@ -3,6 +3,7 @@
 </p>
 
 # Buckaroo Magento2 Analytics extension
+[![Latest release](https://badgen.net/github/release/buckaroo-it/Magento2_Analytics)](https://github.com/buckaroo-it/Magento2_Analytics/releases)
 
 ### Index
 - [Installation and configuration](#installation-and-configuration)
