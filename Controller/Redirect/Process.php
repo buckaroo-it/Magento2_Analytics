@@ -20,23 +20,26 @@
 
 namespace Buckaroo\Magento2Analytics\Controller\Redirect;
 
+use Magento\Framework\App\ResponseInterface;
+
 class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
 {
     /**
      * Redirect to Success url, which means everything seems to be going fine
      *
-     * @return \Magento\Framework\App\ResponseInterface
+     * @return ResponseInterface
      */
     protected function redirectSuccess()
     {
         $this->logger->addDebug(__METHOD__ . '|1|');
+
+//        $this->eventManager->dispatch('buckaroo_process_redirect_success_before');
 
         $store = $this->order->getStore();
 
         /**
          * @noinspection PhpUndefinedMethodInspection
          */
-
         $url = $this->accountConfig->getSuccessRedirect($store);
         
         $successMessage = __('Your order has been placed successfully.');
@@ -50,34 +53,34 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
         $this->customerSession->setSkipSecondChance(false);
 
         if (!empty($this->response['brq_payment_method'])
-            &&
-            ($this->response['brq_payment_method'] == 'applepay')
-            &&
-            !empty($this->response['brq_statuscode'])
-            &&
-            ($this->response['brq_statuscode'] == '190')
-            &&
-            !empty($this->response['brq_test'])
-            &&
-            ($this->response['brq_test'] == 'true')
+            && ($this->response['brq_payment_method'] == 'applepay')
+            && !empty($this->response['brq_statuscode'])
+            && ($this->response['brq_statuscode'] == '190')
+            && !empty($this->response['brq_test'])
+            && ($this->response['brq_test'] == 'true')
         ) {
             $this->redirectSuccessApplePay();
         }
 
         $this->logger->addDebug(__METHOD__ . '|2|' . var_export($url, true));
 
-        //add clientid - GA tracking
-        $clientId = $this->getRequest()->getParam('clientId');
-
-
         $queryArguments = [];
         parse_str((string)parse_url($url, PHP_URL_QUERY), $queryArguments);
 
-        if ($clientId) {
+        $filteredQueryArguments = [];
+        if (class_exists(\Buckaroo\Magento2Analytics\Service\CookieParamService::class)) {
+            $cookieParamService = $this->_objectManager->get(
+                \Buckaroo\Magento2Analytics\Service\CookieParamService::class
+            );
+
+            $filteredQueryArguments = $cookieParamService->getQueryArgumentsByCookies($this->getRequest()->getParams());
+        }
+
+        if (!empty($filteredQueryArguments)) {
             if (strpos($url, '?') !== false) {
                 $url = substr($url, 0, strpos($url, '?'));
             }
-            $queryArguments = array_merge($queryArguments, ["clientId" => $clientId]);
+            $queryArguments = array_merge($queryArguments, $filteredQueryArguments);
         }
 
         if (method_exists($this, 'handleProcessedResponse')) {

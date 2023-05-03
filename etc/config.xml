@@ -24,6 +24,12 @@
         <buckaroo_magento2>
             <analytics>
                 <enable_ga_client_id_tracking>0</enable_ga_client_id_tracking>
+                <cookie_param_pair>
+                    <item1>
+                        <cookie>_ga</cookie>
+                        <url_param>clientId</url_param>
+                    </item1>
+                </cookie_param_pair>
             </analytics>
         </buckaroo_magento2>
     </default>
