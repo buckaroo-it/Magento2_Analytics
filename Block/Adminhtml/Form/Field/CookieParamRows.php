@@ -11,13 +11,15 @@ class CookieParamRows extends AbstractFieldArray
         $this->addColumn('cookie', [
             'label' => __('Cookie Name'),
             'class' => 'required-entry',
-            'style' => 'width: 250px',
         ]);
 
         $this->addColumn('url_param', [
             'label' => __('Url Param Name'),
             'class' => 'required-entry',
-            'style' => 'width: 250px',
+        ]);
+
+        $this->addColumn('replace_regex', [
+            'label' => __('Replace Regex')
         ]);
 
         $this->_addAfter = false;

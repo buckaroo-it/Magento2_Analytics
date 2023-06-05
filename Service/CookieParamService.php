@@ -54,7 +54,7 @@ class CookieParamService
             if (empty($cookieValue)) {
                 continue;
             }
-            $urlParamValue = $this->getUrlParamValueByCookie($pair['cookie'], $cookieValue);
+            $urlParamValue = $this->getUrlParamValueByCookie($cookieValue, $pair['replace_regex']);
             $urlParams .= $pair['url_param'] . '=' . $urlParamValue . '&';
         }
 
@@ -93,25 +93,14 @@ class CookieParamService
     /**
      * Prepare the cookie into url param needed
      *
-     * @param string $cookieName
      * @param string $cookieValue
+     * @param string $regex
      * @return string
      */
-    public function getUrlParamValueByCookie(string $cookieName, string $cookieValue): string
+    public function getUrlParamValueByCookie(string $cookieValue, string $regex): string
     {
-        if ($cookieName == '_ga' || $cookieName == '_gcl_aw') {
-            $parts = explode(".", $cookieValue);
-            if ($parts) {
-                array_shift($parts);
-            }
-            if ($parts) {
-                array_shift($parts);
-            }
-            return implode(".", $parts);
-        }
-
-        if ($cookieName == '_uetmsclkid') {
-            return str_replace('_uet', '', $cookieValue);
+        if (!empty($regex)) {
+            $cookieValue = preg_replace($regex, "", $cookieValue);
         }
 
         return $cookieValue;
