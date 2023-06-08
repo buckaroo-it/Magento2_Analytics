@@ -3,48 +3,29 @@ declare(strict_types=1);
 
 namespace Buckaroo\Magento2Analytics\Plugin;
 
-use Buckaroo\Magento2Analytics\Model\ConfigProvider\Analytics as AnalyticsConfigProvider;
-use Magento\Framework\Stdlib\CookieManagerInterface;
+use Buckaroo\Magento2Analytics\Service\CookieParamService;
 
 class AbstractTransactionBuilderAfterGetUrl
 {
+    private CookieParamService $cookieParamService;
+
     public function __construct(
-        CookieManagerInterface $cookieManager,
-        AnalyticsConfigProvider $configProvider
+        CookieParamService $cookieParamService
     ) {
-        $this->cookieManager = $cookieManager;
-        $this->configProvider = $configProvider;
+        $this->cookieParamService = $cookieParamService;
     }
+
     public function afterGetReturnUrl(
         $subject,
         $result
     ) {
-        //check if this feature is enabled
-        if (!$this->configProvider->isClientIdTrackingEnabled()) {
-            return $result;
-        }
-
         try {
-            $ga_cookie = $this->cookieManager->getCookie(
-                '_ga'
-            );
-            if ($ga_cookie) {
-                $parts = explode(".", $ga_cookie);
-                if ($parts) {
-                    array_shift($parts);
-                }
-                if ($parts) {
-                    array_shift($parts);
-                }
-                $clientId = implode(".", $parts);
-
-                if (strpos($result, '?') !== false) {
-                    $result .= "&clientId=" . $clientId;
-                } else {
-                    $result .= "?clientId=" . $clientId;
-                }
+            if (strpos($result, '?') !== false) {
+                $result .= "&" . $this->cookieParamService->getUrlParamsByCookies();
+            } else {
+                $result .= "?" . $this->cookieParamService->getUrlParamsByCookies();
             }
-        //phpcs:ignore
+            //phpcs:ignore
         } catch (\Exception $e) {
             //@todo log
         }

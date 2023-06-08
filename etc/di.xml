@@ -27,4 +27,7 @@
     <type name="Buckaroo\Magento2\Gateway\Http\TransactionBuilder\AbstractTransactionBuilder">
         <plugin name="Plugin_Buckaroo_Magento2_Gateway_Http_TransactionBuilder_AbstractTransactionBuilder" type="Buckaroo\Magento2Analytics\Plugin\AbstractTransactionBuilderAfterGetUrl" sortOrder="10" disabled="false"/>
     </type>
+    <type name="Buckaroo\Magento2\Gateway\Request\BasicParameter\ReturnUrlDataBuilder">
+        <plugin name="Plugin_Buckaroo_Magento2_Gateway_Request_ReturnUrlDataBuilder" type="Buckaroo\Magento2Analytics\Plugin\AbstractTransactionBuilderAfterGetUrl" sortOrder="10" disabled="false"/>
+    </type>
 </config>    
