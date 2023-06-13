@@ -9,6 +9,7 @@
 - [Installation and configuration](#installation-and-configuration)
 - [Usage](#usage)
 - [Serverside](#serverside)
+- [Features](#features)
 - [Contribute](#contribute)
 - [Versioning](#versioning)
 - [Additional information](#additional-information)
@@ -80,6 +81,26 @@ class MyCustomViewModel
     }
 }
 ```
+
+### Features
+
+#### Dynamic URL Parameters on Success Page Based on Cookies:
+• This new feature enables you to add unlimited URL parameters on the success page, utilizing information stored in cookies. This is a significant addition that enables more granular tracking of customer activity and success page interactions, leading to more precise and actionable analytics data.
+
+• The new module is designed for easy use: simply add another pair of cookie name, URL parameter, and the replace regex if you want to extract only a portion of the text. This flexibility allows for precise control over what information is captured and used in your URL parameters.
+
+**How to Use:**<br>
+To utilize this feature:<br>
+<b>1.</b> Go to the Buckaroo Magento2_Analytics module settings (Stores → Settings → Configuration → Sales → Buckaroo → GA Tracking Options).<br>
+    
+![Google_Analytics_Configuration](https://github.com/buckaroo-it/Magento2_Analytics/assets/105488705/c2308408-46ff-4a66-8252-f224739e53de)
+
+<b>2.</b> Enable GA Tracking.<br>
+<b>3.</b> Add a new pair consisting of the cookie name and the URL parameter that you wish to set based on the cookie's value.<br>
+<b>4.</b> (Optional) If you only need to extract a specific part of the text, provide a replace regex.<br>
+<b>5.</b> Save the settings.<br>
+<b>6.</b> The module will automatically handle the rest, setting the URL parameters on your success page based on the specified cookies.
+<br>
 
 ### Contribute
 
