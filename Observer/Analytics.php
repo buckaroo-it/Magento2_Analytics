@@ -3,19 +3,33 @@ declare(strict_types=1);
 
 namespace Buckaroo\Magento2Analytics\Observer;
 
-class Analytics implements \Magento\Framework\Event\ObserverInterface
+use Buckaroo\Magento2Analytics\Api\Data\AnalyticsInterface;
+use Buckaroo\Magento2Analytics\Api\AnalyticsRepositoryInterface;
+use Buckaroo\Magento2Analytics\Model\ConfigProvider\Analytics as AnalyticsConfigProvider;
+use Buckaroo\Magento2\Logging\Log as BuckarooLog;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Stdlib\CookieManagerInterface;
+
+class Analytics implements ObserverInterface
 {
+    private CookieManagerInterface $cookieManager;
+    private AnalyticsInterface $analyticsModel;
+    private AnalyticsRepositoryInterface $analyticsRepository;
+    private AnalyticsConfigProvider $configProvider;
+    private BuckarooLog $log;
 
     public function __construct(
-        \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
-        \Buckaroo\Magento2Analytics\Api\Data\AnalyticsInterface $analyticsModel,
-        \Buckaroo\Magento2Analytics\Api\AnalyticsRepositoryInterface $analyticsRepository,
-        \Buckaroo\Magento2Analytics\Model\ConfigProvider\Analytics $configProvider
+        CookieManagerInterface $cookieManager,
+        AnalyticsInterface $analyticsModel,
+        AnalyticsRepositoryInterface $analyticsRepository,
+        AnalyticsConfigProvider $configProvider,
+        BuckarooLog $log
     ) {
         $this->cookieManager = $cookieManager;
         $this->analyticsModel = $analyticsModel;
         $this->analyticsRepository = $analyticsRepository;
         $this->configProvider = $configProvider;
+        $this->log = $log;
     }
 
     /**
@@ -37,9 +51,8 @@ class Analytics implements \Magento\Framework\Event\ObserverInterface
             if ($quote) {
                 $quote_id = $quote->getEntityId();
             }
-        //phpcs:ignore
         } catch (\Exception $e) {
-            //@todo log
+            $this->log->error($e);
         }
 
         if (isset($quote_id)) {
@@ -48,7 +61,12 @@ class Analytics implements \Magento\Framework\Event\ObserverInterface
             );
             $this->analyticsModel->setQuoteId($quote_id);
             $this->analyticsModel->setClientId($ga_cookie);
-            $this->analyticsRepository->save($this->analyticsModel);
+            
+            try {
+                $this->analyticsRepository->save($this->analyticsModel);
+            } catch (\Exception $e) {
+                $this->log->error($e);
+            }
         }
     }
 }
