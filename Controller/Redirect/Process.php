@@ -52,15 +52,7 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
         $this->quote->setReservedOrderId(null);
         $this->customerSession->setSkipSecondChance(false);
 
-        if (!empty($this->response['brq_payment_method'])
-            && ($this->response['brq_payment_method'] == 'applepay')
-            && !empty($this->response['brq_statuscode'])
-            && ($this->response['brq_statuscode'] == '190')
-            && !empty($this->response['brq_test'])
-            && ($this->response['brq_test'] == 'true')
-        ) {
-            $this->redirectSuccessApplePay();
-        }
+        $this->redirectSuccessApplePay();
 
         $this->logger->addDebug(__METHOD__ . '|2|' . var_export($url, true));
 
