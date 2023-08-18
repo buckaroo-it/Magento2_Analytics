@@ -29,7 +29,7 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
      *
      * @return ResponseInterface
      */
-    protected function redirectSuccess()
+    protected function redirectSuccess(): ResponseInterface
     {
         $this->logger->addDebug(__METHOD__ . '|1|');
 
