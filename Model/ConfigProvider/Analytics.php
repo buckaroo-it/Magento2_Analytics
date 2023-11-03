@@ -48,6 +48,14 @@ class Analytics
             ScopeInterface::SCOPE_STORES
         );
 
-        return $configValue ? $this->serialize->unserialize($configValue) : [];
+        if (is_array($configValue)) {
+            return $configValue;
+        }
+
+        try {
+            return $this->serialize->unserialize($configValue);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }
