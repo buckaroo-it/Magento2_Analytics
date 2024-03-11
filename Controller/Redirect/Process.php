@@ -31,9 +31,7 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
      */
     protected function redirectSuccess(): ResponseInterface
     {
-        $this->logger->addDebug(__METHOD__ . '|1|');
-
-//        $this->eventManager->dispatch('buckaroo_process_redirect_success_before');
+        $this->eventManager->dispatch('buckaroo_process_redirect_success_before');
 
         $store = $this->order->getStore();
 
@@ -41,7 +39,7 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
          * @noinspection PhpUndefinedMethodInspection
          */
         $url = $this->accountConfig->getSuccessRedirect($store);
-        
+
         $successMessage = __('Your order has been placed successfully.');
         if (method_exists($this, 'addSuccessMessage')) {
             $this->addSuccessMessage($successMessage);
@@ -50,11 +48,16 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
         }
 
         $this->quote->setReservedOrderId(null);
-        $this->customerSession->setSkipSecondChance(false);
 
         $this->redirectSuccessApplePay();
 
-        $this->logger->addDebug(__METHOD__ . '|2|' . var_export($url, true));
+        $this->logger->addDebug(sprintf(
+            '[REDIRECT - %s] | [Controller] | [%s:%s] - Redirect Success | redirectURL: %s',
+            $this->payment->getMethod(),
+            __METHOD__,
+            __LINE__,
+            $url,
+        ));
 
         $queryArguments = [];
         parse_str((string)parse_url($url, PHP_URL_QUERY), $queryArguments);

@@ -21,7 +21,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-      <section id="buckaroo_magento2" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+      <section id="buckaroo_magento2_settings" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
         <group id="analytics" translate="label comment" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>GA Tracking Options</label>
             <field id="enable_ga_client_id_tracking" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
