@@ -31,14 +31,15 @@ class Process extends \Buckaroo\Magento2\Controller\Redirect\Process
      */
     protected function redirectSuccess(): ResponseInterface
     {
-        $this->eventManager->dispatch('buckaroo_process_redirect_success_before');
-
         $store = $this->order->getStore();
-
         /**
          * @noinspection PhpUndefinedMethodInspection
          */
         $url = $this->accountConfig->getSuccessRedirect($store);
+        $arguments = [];
+
+        $this->eventManager->dispatch('buckaroo_process_redirect_success_before',
+            ['url' => $url, 'arguments' => $arguments]);
 
         $successMessage = __('Your order has been placed successfully.');
         if (method_exists($this, 'addSuccessMessage')) {

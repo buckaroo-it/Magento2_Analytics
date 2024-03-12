@@ -23,4 +23,8 @@
   <event name="checkout_submit_all_after">
     <observer name="buckaroo_magento2_observer_frontend_checkout_submitallafter_checkout_submit_all_after" instance="Buckaroo\Magento2Analytics\Observer\Analytics"/>
   </event>
+
+  <event name="buckaroo_process_redirect_success_before">
+    <observer name="buckaroo_magento2_analytics_add_parameters" instance="Buckaroo\Magento2Analytics\Observer\ProcessRedirectSuccessBefore" />
+  </event>
 </config>
