@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://www.buckaroo.nl/media/3478/magento2_googleanalytics_icon.png" width="200px" position="center">
+  <img src="https://www.buckaroo.nl/media/osphsp1u/magento2_googleanalytics_icon.png" width="200px" position="center">
 </p>
 
 # Buckaroo Magento2 Analytics extension
