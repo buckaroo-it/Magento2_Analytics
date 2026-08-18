@@ -1,62 +1,92 @@
 <p align="center">
-  <img src="https://www.buckaroo.nl/media/osphsp1u/magento2_googleanalytics_icon.png" width="200px" position="center">
+  <a href="https://www.buckaroo.nl">
+    <img src="https://raw.githubusercontent.com/buckaroo-it/Media/main/Buckaroo/README.md%20Headers/buckaroo-magento2-analytics-header-rounded.png" alt="Buckaroo — Analytics for Magento 2" width="100%">
+  </a>
 </p>
 
-# Buckaroo Magento2 Analytics extension
-[![Latest release](https://badgen.net/github/release/buckaroo-it/Magento2_Analytics)](https://github.com/buckaroo-it/Magento2_Analytics/releases)
+<h1 align="center">Buckaroo Analytics for Magento 2</h1>
 
-### Index
-- [Installation and configuration](#installation-and-configuration)
-- [Usage](#usage)
-- [Serverside](#serverside)
-- [Features](#features)
-- [Contribute](#contribute)
-- [Versioning](#versioning)
-- [Additional information](#additional-information)
 ---
 
-### Installation and configuration
-```
-composer require buckaroo/magento2analytics
-php bin/magento module:enable Buckaroo_Magento2Analytics
+> [!WARNING]
+> **The Analytics module is now part of the Buckaroo Magento 2 plugin.** This separate module is no longer needed and is no longer developed. Do not install `buckaroo/magento2analytics` in a new project — install the [Buckaroo Magento 2 plugin](https://github.com/buckaroo-it/Magento2), which includes the GA tracking support out of the box.
+
+---
+
+## About
+
+Google Analytics misattributes the conversion source when a purchase spans more than one browser or device. A visitor arrives from an ad campaign, starts the order, completes the payment on their phone, and the success page loads somewhere other than where the session began. The conversion is then credited to the wrong source, or to none at all.
+
+This module solves that by storing the Google Client ID against the order, so the success page can fire an enriched tracking call that ties the conversion back to the original session. It also sets URL parameters on the success page from cookie values, which allows for more granular tracking.
+
+The functionality used to live in this repository as a separate module. It has since been merged into the main [Buckaroo Magento 2 plugin](https://github.com/buckaroo-it/Magento2).
+
+This repository is kept online for reference and for merchants who are still on an older setup.
+
+---
+
+## Migrating to the main plugin
+
+If you currently have the separate module installed, remove it and make sure you are on a plugin version that includes GA tracking. Run the following from your Magento 2 root folder:
+
+```bash
+composer remove buckaroo/magento2analytics
+composer update buckaroo/magento2
 php bin/magento setup:upgrade
+php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
-```
-### Usage
-#### General information
-
-GA Tracking does not allocate properly the conversion source when the transaction happens cross-browser or cross-device. Visitor lands on the website from an ad campaign, goes through the order process, but the payment process takes place on a different device or browser and success page is also displayed in a different device
-In order to handle this situation, we track the Google Client ID against the order and we can trigger an enriched version of the tracking code in the success page, by adding the clientId parameter.
-
-### Javascript / GTM
-
-`clientId` value is passed as a parameter in the URL of the success page, part of the redirect process. This can be extracted and used in the javascript code that triggers the GA/UA/GTM/other event for the conversion.
-Standard structure of the URL is the following:
-`/checkout/onepage/success/?clientId=****/`
-
-**and the clientId can be extracted:**
-```
-    try{
-        currentPageUrl = window.location.href;
-        myClientId = currentPageUrl.split('clientId=')[1].split('/')[0];
-    } catch(error) {
-        myClientId = '';
-    }
+php bin/magento cache:flush
 ```
 
-**and sent to GA/UA part of the tracking code:**
+> [!IMPORTANT]
+> Test this on a staging environment first. Check your GA tracking settings afterwards and confirm that conversions still register correctly before you rely on the data.
 
-```
-    ga('create', 'UA-XXXXX-Y', {
-        'storage': 'none',
-        'clientId': myClientId
-    });
-```
-### Serverside
+---
 
-The information related to clientId is also stored in the database. And this can be used on the server side level, via the Model repository `Buckaroo\Magento2Analytics\Model\AnalyticsRepository` using the `quoteId`:
+## Configuration
 
+GA tracking is configured in the main plugin, under **Stores → Configuration → Sales → Buckaroo → GA Tracking Options** in the Magento admin.
+
+To set a URL parameter from a cookie:
+
+1. Enable GA tracking.
+2. Add a pair consisting of the cookie name and the URL parameter you want to set from it.
+3. Optionally add a replace regex, if you only need part of the cookie value.
+4. Save the settings.
+
+The parameters are then applied to the success page automatically.
+
+---
+
+## Usage
+
+### Reading the Client ID in JavaScript or GTM
+
+The `clientId` is passed as a URL parameter on the success page during the redirect, in the form `/checkout/onepage/success/?clientId=****/`. Extract it and hand it to your tracking code:
+
+```javascript
+try {
+    currentPageUrl = window.location.href;
+    myClientId = currentPageUrl.split('clientId=')[1].split('/')[0];
+} catch (error) {
+    myClientId = '';
+}
 ```
+
+Then pass it into the tracking call:
+
+```javascript
+ga('create', 'UA-XXXXX-Y', {
+    'storage': 'none',
+    'clientId': myClientId
+});
+```
+
+### Reading the Client ID server-side
+
+The Client ID is also stored in the database, and can be looked up by `quoteId` through the repository:
+
+```php
 use Buckaroo\Magento2Analytics\Model\AnalyticsRepository;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -70,56 +100,33 @@ class MyCustomViewModel
 
     public function getClientId($quoteId)
     {
-        $clientId = null;
         try {
-            $clientIdData = $analyticsRepo->getByQuoteId($quote->getId());
-            return $clientIdData->getClientId();    
-        } catch(\Exception $e) {
-            throw new NoSuchEntityException(__('ClientId not found for quoteId' . $quoteId ));
+            $clientIdData = $this->analyticsRepo->getByQuoteId($quoteId);
+            return $clientIdData->getClientId();
+        } catch (\Exception $e) {
+            throw new NoSuchEntityException(__('ClientId not found for quoteId ' . $quoteId));
         }
-        
     }
 }
 ```
 
-### Features
+> [!NOTE]
+> The namespace above is the one used by the separate module. After migrating to the main plugin, check the current namespace in the plugin source before wiring this into your own code.
 
-#### Dynamic URL Parameters on Success Page Based on Cookies:
-• This new feature enables you to add unlimited URL parameters on the success page, utilizing information stored in cookies. This is a significant addition that enables more granular tracking of customer activity and success page interactions, leading to more precise and actionable analytics data.
+---
 
-• The new module is designed for easy use: simply add another pair of cookie name, URL parameter, and the replace regex if you want to extract only a portion of the text. This flexibility allows for precise control over what information is captured and used in your URL parameters.
+## Support
 
-**How to Use:**<br>
-To utilize this feature:<br>
-<b>1.</b> Go to the Buckaroo Magento2_Analytics module settings (Stores → Settings → Configuration → Sales → Buckaroo → GA Tracking Options).<br>
-    
-![Google_Analytics_Configuration](https://github.com/buckaroo-it/Magento2_Analytics/assets/105488705/c2308408-46ff-4a66-8252-f224739e53de)
+Questions about GA tracking belong with the main plugin, since that is where the code now lives.
 
-<b>2.</b> Enable GA Tracking.<br>
-<b>3.</b> Add a new pair consisting of the cookie name and the URL parameter that you wish to set based on the cookie's value.<br>
-<b>4.</b> (Optional) If you only need to extract a specific part of the text, provide a replace regex.<br>
-<b>5.</b> Save the settings.<br>
-<b>6.</b> The module will automatically handle the rest, setting the URL parameters on your success page based on the specified cookies.
-<br>
+- **Bug reports and feature requests:** [open an issue on the main plugin](https://github.com/buckaroo-it/Magento2/issues)
+- **Technical support:** [support@buckaroo.nl](mailto:support@buckaroo.nl)
+- **Phone:** +31 (0)30 711 50 50
+- **Gateway status:** [status.buckaroo.io](https://status.buckaroo.io/)
 
-### Contribute
+---
 
-We really appreciate it when developers contribute to improve the Buckaroo plugins.
-If you want to contribute as well, then please follow our [Contribution Guidelines](CONTRIBUTING.md).
-
-### Versioning 
-<p align="left">
-  <img src="https://www.buckaroo.nl/media/3480/magento_versioning.png" width="500px" position="center">
+<p align="center">
+  <sub>Made with care by <a href="https://www.buckaroo.nl">Buckaroo</a>.<br>
+  This document is subject to change; typos and language errors are possible.</sub>
 </p>
-
-- **MAJOR:** Breaking changes that require additional testing/caution.
-- **MINOR:** Changes that should not have a big impact.
-- **PATCHES:** Bug and hotfixes only.
-
-
-### Additional information
-- **Support:** https://support.buckaroo.eu/contact
-- **Contact:** [support@buckaroo.nl](mailto:support@buckaroo.nl) or [+31 (0)30 711 50 50](tel:+310307115050)
-
-<b>Please note:</b><br>
-This file has been prepared with the greatest possible care and is subject to language and/or spelling errors.
